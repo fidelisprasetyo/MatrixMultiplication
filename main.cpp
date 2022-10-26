@@ -1,38 +1,27 @@
 #include <iostream>
 #include <vector>
+#include <math.h>
+#include "SquareMatrix.h"
 
-class Matrix {
-public:
-    Matrix(int n) : size(n) {
-        m.resize(size);
-        for(int i = 0; i < size; i++) {
-            m[i].resize(size);
-        }
-        InsertValues();
+bool isPowerOfTwo(int n) {
+    if (n == 0) {
+        return false;
     }
-    void InsertValues() {
-        for(int row = 0; row < size; row++) {
-            for(int col = 0; col < size; col++) {
-                std::cout << "Insert [" << row << ']' << '[' << col << "] value: ";
-                std::cin >> m[row][col];
-            }
-        }
+    return (ceil(log2(n)) == floor(log2(n)));
+}
+
+void bruteForceMul(const SquareMatrix& M1, const SquareMatrix& M2) {
+    if(M1.getSize() != M2.getSize() || !isPowerOfTwo(M1.getSize()) || !isPowerOfTwo(M2.getSize())) {
+        std::cout << "Invalid matrix sizes!\n";
+        return;
     }
-    void PrintMatrix() {
-        for(int row = 0; row < size; row++) {
-            for(int col = 0; col < size; col++) {
-                std::cout << m[row][col] << ' ';
-            }
-            std::cout << '\n';
-        }
-    }
-private:
-    int size;
-    std::vector<std::vector<int>> m;
-};
+    std::cout << "Multiplication!\n";
+    return;
+}    
 
 int main() {
-    Matrix M1(4);
-    M1.PrintMatrix();
+    SquareMatrix M1(5);
+    SquareMatrix M2(5);
+    bruteForceMul(M1, M2);
     return 0;
 }
