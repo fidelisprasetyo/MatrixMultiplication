@@ -43,7 +43,8 @@ int main() {
     SquareMatrix M2(4);
     M1.randomValues();
     M2.randomValues();
-    M1.print();
-    M2.print();
+    if(isMatrixValid(M1,M2)) {
+        bruteForceMul(M1,M2);
+    }
     return 0;
 }
