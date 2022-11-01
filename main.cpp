@@ -5,46 +5,18 @@
 
 #include <iostream>
 #include <vector>
-#include <math.h>
+#include "algo.h"
 #include "SquareMatrix.h"
-
-bool isPowerOfTwo(int n) {
-    if (n == 0) {
-        return false;
-    }
-    return (ceil(log2(n)) == floor(log2(n)));
-}
-
-bool isMatrixValid(const SquareMatrix& M1, const SquareMatrix& M2) {
-    if(M1.getSize() != M2.getSize() || !isPowerOfTwo(M1.getSize()) || !isPowerOfTwo(M2.getSize())) {
-        return false;
-    }
-    return true;
-}
-
-void bruteForceMul(SquareMatrix& M1, SquareMatrix& M2) {
-    int n = M1.getSize();
-    SquareMatrix P(n);
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            P[i][j] = 0;
-            for(int k = 0; k < n; k++) {
-                P[i][j] += M1[i][k] * M2[k][j];
-            }
-        }
-    }
-    P.print();
-    return;
-}    
 
 int main() {
     srand(time(NULL));
-    SquareMatrix M1(4);
-    SquareMatrix M2(4);
-    M1.randomValues();
-    M2.randomValues();
-    if(isMatrixValid(M1,M2)) {
-        bruteForceMul(M1,M2);
-    }
+
+    SquareMatrix A(4);
+    SquareMatrix B(4);
+    A.autoFill('a');
+    B.autoFill('b');
+    SquareMatrix C(4);
+    C = divideAndConquerMul(A,B);
+    C.print();
     return 0;
 }
