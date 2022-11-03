@@ -24,6 +24,7 @@ public:
     int size() const;
     std::vector<int>& operator [](int i);
     SquareMatrix operator+(SquareMatrix other);
+    SquareMatrix operator-(SquareMatrix other);
 private:
     int n;
     std::vector<std::vector<int>> m;
@@ -94,6 +95,17 @@ SquareMatrix SquareMatrix::operator+(SquareMatrix other) {
     for(int row = 0; row < n; row++) {
         for(int col = 0; col < n; col++) {
             result[row][col] = m[row][col] + other[row][col];
+        }
+    }
+    return result;
+}
+
+// operator- overloading
+SquareMatrix SquareMatrix::operator-(SquareMatrix other) {
+    SquareMatrix result(n);
+    for(int row = 0; row < n; row++) {
+        for(int col = 0; col < n; col++) {
+            result[row][col] = m[row][col] - other[row][col];
         }
     }
     return result;
