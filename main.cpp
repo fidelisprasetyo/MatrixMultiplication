@@ -10,8 +10,8 @@
 #include "algo.h"
 #include "SquareMatrix.h"
 
-#define MAX_EXP 4 //7?
-#define TEST_COUNT 10
+#define MAX_EXP 5 //7?
+#define TEST_COUNT 100
 #define PRINT_STATUS false
 
 int main(int argc, char* argv[]) {

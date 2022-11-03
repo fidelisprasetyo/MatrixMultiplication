@@ -16,15 +16,45 @@ int getRandInt(int range) {
 
 class SquareMatrix {
 public:
+    // member functions
     SquareMatrix(int _size);
     void autoFill();
     void autoFill(char key);
     void clear();
     void print() const;
     int size() const;
-    std::vector<int>& operator [](int i);
-    SquareMatrix operator+(SquareMatrix other);
-    SquareMatrix operator-(SquareMatrix other);
+public:
+    // operator overloads
+    int& operator()(size_t row, size_t col) {
+        return m[row][col];
+    }
+    int operator()(size_t row, size_t col) const {
+        return m[row][col];
+    }
+    SquareMatrix& operator+=(const SquareMatrix& other) {
+        for(int row = 0; row < n; row++) {
+            for(int col = 0; col < n; col++) {
+                m[row][col] += other(row, col);
+            }
+        }
+        return *this;
+    }
+    SquareMatrix& operator-=(const SquareMatrix& other) {
+        for(int row = 0; row < n; row++) {
+            for(int col = 0; col < n; col++) {
+                m[row][col] -= other(row, col);
+            }
+        }
+        return *this;
+    }
+    friend SquareMatrix operator+(SquareMatrix lhs, const SquareMatrix& rhs) {
+        lhs += rhs;
+        return lhs;
+    }
+    friend SquareMatrix operator-(SquareMatrix lhs, const SquareMatrix& rhs) {
+        lhs -= rhs;
+        return lhs;
+    }
 private:
     int n;
     std::vector<std::vector<int>> m;
@@ -82,31 +112,4 @@ void SquareMatrix::print() const {
 // return the size of the matrix
 int SquareMatrix::size() const {
     return n;
-}
-
-// operator[] overloading
-std::vector<int>& SquareMatrix::operator [](int i) {
-    return m[i];
-}
-
-// operator+ overloading
-SquareMatrix SquareMatrix::operator+(SquareMatrix other) {
-    SquareMatrix result(n);
-    for(int row = 0; row < n; row++) {
-        for(int col = 0; col < n; col++) {
-            result[row][col] = m[row][col] + other[row][col];
-        }
-    }
-    return result;
-}
-
-// operator- overloading
-SquareMatrix SquareMatrix::operator-(SquareMatrix other) {
-    SquareMatrix result(n);
-    for(int row = 0; row < n; row++) {
-        for(int col = 0; col < n; col++) {
-            result[row][col] = m[row][col] - other[row][col];
-        }
-    }
-    return result;
 }
