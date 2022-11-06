@@ -10,7 +10,7 @@
 #include "algo.h"
 #include "SquareMatrix.h"
 
-#define MAX_EXP 5 //7?
+#define MAX_EXP 7
 #define TEST_COUNT 100
 #define PRINT_STATUS false
 
@@ -44,11 +44,6 @@ int main(int argc, char* argv[]) {
     std::ofstream data;
     data.open("data.csv");
 
-    auto total_runtime_classic = 0;
-    auto total_runtime_div = 0;
-    auto total_runtime_strassen = 0;
-
-    int count = 0;      // number of tests performed
     int exp = 0;
     
     data << "Size, Classic, Divide and Conquer, Strassen\n";
@@ -62,8 +57,7 @@ int main(int argc, char* argv[]) {
             A.autoFill();
             B.autoFill();
             if(isMatrixValid(A,B)) {
-                count++;
-
+                // classic multiplication
                 if(PRINT_STATUS) std::cout << "Status: Running Classic Multiplication [size = " << size << ", test #" << count << " ] .... ";
                 auto start = std::chrono::high_resolution_clock::now();
                 C = classicMultiplication(A,B);
@@ -71,9 +65,9 @@ int main(int argc, char* argv[]) {
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start).count();
                 if(PRINT_STATUS) std::cout << "Done. [ Runtime = " << duration << " ms ]\n";
 
-                total_runtime_classic += duration;
                 C.clear();
 
+                // naive divide and conquer multiplication
                 if(PRINT_STATUS) std::cout << "Status: Running Divide and Conquer Multiplication [size = " << size << ", test #" << count << " ] .... ";
                 auto start1 = std::chrono::high_resolution_clock::now();
                 C = divideAndConquerMul(A,B);
@@ -81,9 +75,9 @@ int main(int argc, char* argv[]) {
                 auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(stop1-start1).count();
                 if(PRINT_STATUS) std::cout << "Done. [ Runtime = " << duration1 << " ms ]\n";
 
-                total_runtime_div += duration1;
                 C.clear();
 
+                // strassen's algorithm multiplication
                 if(PRINT_STATUS) std::cout << "Status: Running Strassen Multiplication [size = " << size << ", test #" << count << " ] .... ";
                 auto start2 = std::chrono::high_resolution_clock::now();
                 C = strassenAlgorithm(A,B);
@@ -91,23 +85,15 @@ int main(int argc, char* argv[]) {
                 auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(stop2-start2).count();
                 if(PRINT_STATUS) std::cout << "Done. [ Runtime = " << duration2 << " ms ]\n\n";
 
-                total_runtime_strassen += duration2;
-
+                // stream the data into a csv file
                 data << size << ',' << duration << ',' << duration1 << ',' << duration2 << '\n';
                 C.clear();
-
             }
         }
         exp++;
     }
 
     data.close();
-
-    std::cout << "SUMMARY:\n";
-    std::cout << "Max size = " << (2 << (MAX_EXP-1)) << " , Number of tests: " << count;
-    std::cout << "\n  > Classic Multiplication Average Runtime: " << total_runtime_classic/ count << " ms";
-    std::cout << "\n  > Divide and Conquer Multiplication Average Runtime: " << total_runtime_div/ count << " ms";
-    std::cout << "\n  > Strassen Multiplication Average Runtime: " << total_runtime_strassen/ count << " ms";
     
     return 0;
 }

@@ -8,8 +8,6 @@
 #include <math.h>   // ceil & floor
 #include "SquareMatrix.h"
 
-#define LEAF_SIZE 50
-
 bool isPowerOfTwo(int n) {
     if (n == 0) {
         return false;
