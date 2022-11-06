@@ -12,7 +12,7 @@
 
 #define MAX_EXP 7
 #define TEST_COUNT 100
-#define PRINT_STATUS false
+#define PRINT_STATUS true
 
 int main(int argc, char* argv[]) {
     srand(time(NULL));
@@ -45,10 +45,13 @@ int main(int argc, char* argv[]) {
     data.open("data.csv");
 
     int exp = 0;
+    int count = 0;
     
     data << "Size, Classic, Divide and Conquer, Strassen\n";
 
     while(exp < MAX_EXP) {
+        count++;
+        
         int size = 2 << exp;    // 2^exp
         SquareMatrix A(size);
         SquareMatrix B(size);
