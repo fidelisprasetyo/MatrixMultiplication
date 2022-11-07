@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <stdlib.h>
 
-#define RAND_RANGE 10
+#define RAND_RANGE 100
 
 int getRandInt(int range) {
     return rand() % range;

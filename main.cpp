@@ -10,8 +10,8 @@
 #include "algo.h"
 #include "SquareMatrix.h"
 
-#define MAX_EXP 7
-#define TEST_COUNT 100
+#define MAX_EXP 10
+#define TEST_COUNT 5
 #define PRINT_STATUS true
 
 int main(int argc, char* argv[]) {
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
         C.print();
         C.clear();
         std::cout << "Divide and Conquer Result:\n";
-        C = divideAndConquerMul(A,B);
+        C = divideAndConquerMul(A, B);
         C.print();
         C.clear();
         std::cout << "Strassen Algorithm Result:\n";
@@ -50,13 +50,12 @@ int main(int argc, char* argv[]) {
     data << "Size, Classic, Divide and Conquer, Strassen\n";
 
     while(exp < MAX_EXP) {
-        count++;
-        
         int size = 2 << exp;    // 2^exp
         SquareMatrix A(size);
         SquareMatrix B(size);
         SquareMatrix C(size);
         for(int t = 0; t < TEST_COUNT; t++) {
+            count++;
             A.autoFill();
             B.autoFill();
             if(isMatrixValid(A,B)) {
@@ -68,8 +67,6 @@ int main(int argc, char* argv[]) {
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start).count();
                 if(PRINT_STATUS) std::cout << "Done. [ Runtime = " << duration << " ms ]\n";
 
-                C.clear();
-
                 // naive divide and conquer multiplication
                 if(PRINT_STATUS) std::cout << "Status: Running Divide and Conquer Multiplication [size = " << size << ", test #" << count << " ] .... ";
                 auto start1 = std::chrono::high_resolution_clock::now();
@@ -77,8 +74,6 @@ int main(int argc, char* argv[]) {
                 auto stop1 = std::chrono::high_resolution_clock::now();
                 auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(stop1-start1).count();
                 if(PRINT_STATUS) std::cout << "Done. [ Runtime = " << duration1 << " ms ]\n";
-
-                C.clear();
 
                 // strassen's algorithm multiplication
                 if(PRINT_STATUS) std::cout << "Status: Running Strassen Multiplication [size = " << size << ", test #" << count << " ] .... ";
@@ -90,9 +85,9 @@ int main(int argc, char* argv[]) {
 
                 // stream the data into a csv file
                 data << size << ',' << duration << ',' << duration1 << ',' << duration2 << '\n';
-                C.clear();
             }
         }
+        count = 0;
         exp++;
     }
 

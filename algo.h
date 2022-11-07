@@ -6,6 +6,7 @@
 #pragma once
 
 #include <math.h>   // ceil & floor
+#include <iomanip>
 #include "SquareMatrix.h"
 
 bool isPowerOfTwo(int n) {
@@ -22,6 +23,7 @@ bool isMatrixValid(const SquareMatrix& A, const SquareMatrix& B) {
     return true;
 }
 
+// brute force matrix multiplication
 SquareMatrix classicMultiplication(const SquareMatrix& A, const SquareMatrix& B) {
     int n = A.size();
     SquareMatrix C(n);
@@ -45,31 +47,31 @@ SquareMatrix divideAndConquerMul(const SquareMatrix& A, const SquareMatrix& B) {
     }
     // recursive case: divide into quadrants
     else {
-        int quadrant_size = A.size() / 2;
+        int n = A.size() / 2;
 
         // initiate the quadrants
-        SquareMatrix A_00(quadrant_size); SquareMatrix B_00(quadrant_size);
-        SquareMatrix A_01(quadrant_size); SquareMatrix B_01(quadrant_size);
-        SquareMatrix A_10(quadrant_size); SquareMatrix B_10(quadrant_size);
-        SquareMatrix A_11(quadrant_size); SquareMatrix B_11(quadrant_size);
+        SquareMatrix A_00(n); SquareMatrix B_00(n);
+        SquareMatrix A_01(n); SquareMatrix B_01(n);
+        SquareMatrix A_10(n); SquareMatrix B_10(n);
+        SquareMatrix A_11(n); SquareMatrix B_11(n);
 
-        SquareMatrix C_00(quadrant_size);
-        SquareMatrix C_01(quadrant_size);
-        SquareMatrix C_10(quadrant_size);
-        SquareMatrix C_11(quadrant_size);
+        SquareMatrix C_00(n);
+        SquareMatrix C_01(n);
+        SquareMatrix C_10(n);
+        SquareMatrix C_11(n);
 
         // fill the quadrants
-        for(int i = 0; i < quadrant_size; i++) {
-            for(int j = 0; j < quadrant_size; j++) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
                 A_00(i,j) = A(i,j);
-                A_01(i,j) = A(i,j + quadrant_size);
-                A_10(i,j) = A(i + quadrant_size,j);
-                A_11(i,j) = A(i + quadrant_size,j + quadrant_size);
+                A_01(i,j) = A(i,j + n);
+                A_10(i,j) = A(i + n,j);
+                A_11(i,j) = A(i + n,j + n);
 
                 B_00(i,j) = B(i,j);
-                B_01(i,j) = B(i,j + quadrant_size);
-                B_10(i,j) = B(i + quadrant_size,j);
-                B_11(i,j) = B(i + quadrant_size,j + quadrant_size);
+                B_01(i,j) = B(i,j + n);
+                B_10(i,j) = B(i + n,j);
+                B_11(i,j) = B(i + n,j + n);
             }
         }
 
@@ -80,19 +82,19 @@ SquareMatrix divideAndConquerMul(const SquareMatrix& A, const SquareMatrix& B) {
         C_11 = divideAndConquerMul(A_10, B_01) + divideAndConquerMul(A_11, B_11);    // C_11 = (A_10 * B_01) + (A_11 * B_11)
 
         // combine into 1 matrix
-        for(int i = 0; i < quadrant_size; i++) {
-            for(int j = 0; j < quadrant_size; j++) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
                 C(i,j) = C_00(i,j);
-                C(i,j + quadrant_size) = C_01(i,j);
-                C(i + quadrant_size,j) = C_10(i,j);
-                C(i + quadrant_size,j + quadrant_size) = C_11(i,j);
+                C(i,j + n) = C_01(i,j);
+                C(i + n,j) = C_10(i,j);
+                C(i + n,j + n) = C_11(i,j);
             }
         }
     }
     return C;
 }
-
 SquareMatrix strassenAlgorithm(const SquareMatrix& A, const SquareMatrix& B) {
+
     SquareMatrix C(A.size());
 
     // base case: when the quadrant only contains 1 element
@@ -101,34 +103,34 @@ SquareMatrix strassenAlgorithm(const SquareMatrix& A, const SquareMatrix& B) {
     }
     // recursive case: divide into quadrants
     else {
-        int quadrant_size = A.size() / 2;
+        int n = A.size() / 2;
 
         // initiate the quadrants
-        SquareMatrix A_00(quadrant_size); SquareMatrix B_00(quadrant_size); SquareMatrix C_00(quadrant_size);
-        SquareMatrix A_01(quadrant_size); SquareMatrix B_01(quadrant_size); SquareMatrix C_01(quadrant_size);
-        SquareMatrix A_10(quadrant_size); SquareMatrix B_10(quadrant_size); SquareMatrix C_10(quadrant_size);
-        SquareMatrix A_11(quadrant_size); SquareMatrix B_11(quadrant_size); SquareMatrix C_11(quadrant_size);
+        SquareMatrix A_00(n); SquareMatrix B_00(n); SquareMatrix C_00(n);
+        SquareMatrix A_01(n); SquareMatrix B_01(n); SquareMatrix C_01(n);
+        SquareMatrix A_10(n); SquareMatrix B_10(n); SquareMatrix C_10(n);
+        SquareMatrix A_11(n); SquareMatrix B_11(n); SquareMatrix C_11(n);
 
-        SquareMatrix P0(quadrant_size);
-        SquareMatrix P1(quadrant_size);
-        SquareMatrix P2(quadrant_size);
-        SquareMatrix P3(quadrant_size);
-        SquareMatrix P4(quadrant_size);
-        SquareMatrix P5(quadrant_size);
-        SquareMatrix P6(quadrant_size);
+        SquareMatrix P0(n);
+        SquareMatrix P1(n);
+        SquareMatrix P2(n);
+        SquareMatrix P3(n);
+        SquareMatrix P4(n);
+        SquareMatrix P5(n);
+        SquareMatrix P6(n);
 
         // fill the quadrants
-        for(int i = 0; i < quadrant_size; i++) {
-            for(int j = 0; j < quadrant_size; j++) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
                 A_00(i,j) = A(i,j);
-                A_01(i,j) = A(i,j + quadrant_size);
-                A_10(i,j) = A(i + quadrant_size,j);
-                A_11(i,j) = A(i + quadrant_size,j + quadrant_size);
+                A_01(i,j) = A(i,j + n);
+                A_10(i,j) = A(i + n,j);
+                A_11(i,j) = A(i + n,j + n);
 
                 B_00(i,j) = B(i,j);
-                B_01(i,j) = B(i,j + quadrant_size);
-                B_10(i,j) = B(i + quadrant_size,j);
-                B_11(i,j) = B(i + quadrant_size,j + quadrant_size);
+                B_01(i,j) = B(i,j + n);
+                B_10(i,j) = B(i + n,j);
+                B_11(i,j) = B(i + n,j + n);
             }
         }
 
@@ -147,12 +149,12 @@ SquareMatrix strassenAlgorithm(const SquareMatrix& A, const SquareMatrix& B) {
         C_11 = P0 - P2 + P4 - P6;
 
         // combine into 1 matrix
-        for(int i = 0; i < quadrant_size; i++) {
-            for(int j = 0; j < quadrant_size; j++) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
                 C(i,j) = C_00(i,j);
-                C(i,j + quadrant_size) = C_01(i,j);
-                C(i + quadrant_size,j) = C_10(i,j);
-                C(i + quadrant_size,j + quadrant_size) = C_11(i,j);
+                C(i,j + n) = C_01(i,j);
+                C(i + n,j) = C_10(i,j);
+                C(i + n,j + n) = C_11(i,j);
             }
         }
     }
